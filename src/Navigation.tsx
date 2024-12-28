@@ -9,12 +9,12 @@ const Navigation = () => {
     return (
         <Router>
 
-            <Box sx={{ width: '100%', height: 'auto', display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ width: '100%', height: 'auto', display: 'flex', justifyContent: 'center', paddingTop:4 }}>
                 <Routes>
 
                     <Route path="/" element={<Pages />} />
                     <Route path="/posts/:pageId/:pageToken" element={<Posts />} />
-                    <Route path="/post/comments/:postId/:pageToken" element={<Comments />} />
+                    <Route path="/page/comments/:pageID/:pageName" element={<Comments />} />
                 </Routes>
 
             </Box>

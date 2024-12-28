@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import oauthObject from "services/models/oauth";
-import dataPages from "services/models/pages";
+import dataPages from "services/models/page";
 import dataPosts from "services/models/posts";
 import dataComments from "services/models/comments";
 
