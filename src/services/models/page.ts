@@ -6,6 +6,7 @@ export default interface page{
   status: boolean;
   idPage: string;
   lastRefresh: string | null
+  refreshSuccess: boolean;
 }
 
 export default interface dataPages{

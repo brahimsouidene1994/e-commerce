@@ -61,7 +61,7 @@ const Comments = () => {
         return () => {
             setDataRows([])
         };
-    },[])
+    }, [])
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -88,6 +88,7 @@ const Comments = () => {
                     })
                     .catch(error => {
                         console.log(error);
+                        setLoading(false)
                     })
         }
         else {
@@ -101,6 +102,7 @@ const Comments = () => {
                 })
                 .catch(error => {
                     console.log(error);
+                    setLoading(false)
                 })
         }
     }
@@ -120,6 +122,7 @@ const Comments = () => {
                     })
                     .catch(error => {
                         console.log(error);
+                        setLoading(false)
                     })
             else getComments()
         }
@@ -136,6 +139,7 @@ const Comments = () => {
                         })
                         .catch(error => {
                             console.log(error);
+                            setLoading(false)
                         })
                 else getComments()
         }
@@ -147,13 +151,30 @@ const Comments = () => {
             getComments(true)
     }
 
+    const advancedFilter = async (filter: boolean) => {
+        setFiltered(filter)
+        setLoading(true)
+        await CommentApi.getCommentsDistinctByPostId(searchByPostID, filterByStatus)
+            .then((data) => {
+                setLoading(false)
+                if (data === null) return;
+                if (data) {
+                    fillTable(data)
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                setLoading(false)
+            })
+    }
+
     const fillTable = (data: dataComments) => {
         console.log("fillTable", data)
         if (data.data)
             if (data.data.length > 0) {
                 let row_data: comment[] = []
                 data.data.forEach(element => {
-                    element.from = element.from?element.from:'Unkown';
+                    element.from = element.from ? element.from : 'Unkown';
                     row_data.push(element)
                 });
                 setDataRows(row_data)
@@ -164,19 +185,19 @@ const Comments = () => {
 
     }
 
-    const commentDetails = async(id:number)=>{
+    const commentDetails = async (id: number) => {
         await CommentApi.getCommentByID(id)
-        .then((data) => {
-           console.log("data", data);
-        })
-        .catch(error => {
-            console.log(error);
-        })
+            .then((data) => {
+                console.log("data", data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
     }
 
     return (
         <Box sx={{ width: '80%', display: 'flex', flexDirection: 'column' }}>
-            <Button onClick={()=>setLoadPrintable(true)}>Print</Button>
+            <Button onClick={() => setLoadPrintable(true)}>Print</Button>
             <Box sx={{ width: '100%', padding: '16px 0', display: 'flex' }}>
                 <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
                     <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
@@ -205,14 +226,15 @@ const Comments = () => {
                     </FormControl>
                     <FilterRadioBtns filterByStatus={filterByStatus} setFilterByStatus={setFilterByStatus} />
                 </Box>
-                <Box sx={{ width: '40%', display: 'flex', alignItems: 'center', justifyContent: 'end' }}>
+                <Box sx={{ width: '40%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'end', gap: '10px' }}>
                     {
                         !filtered ?
-                            <Button variant="contained" onClick={() => filterComments(true)} size={'large'}>Filter By Phone Numbers</Button>
+                            <Button variant="contained" onClick={() => filterComments(true)} size={'large'} sx={{ width: '300px' }}>Filter By Phone Numbers</Button>
                             :
                             <Button variant="outlined" onClick={() => filterComments(false)} size={'large'}>Reset Filter</Button>
 
                     }
+                    <Button variant="contained" onClick={() => advancedFilter(true)} size={'large'} sx={{ width: '300px' }} disabled={!searchByPostID}>Advanced By Phone Numbers</Button>
                 </Box>
             </Box>
             {
@@ -307,7 +329,7 @@ const Comments = () => {
             {
                 loadPrintable &&
                 <div style={{ display: "none" }}>
-                    <PrintableTable data={dataRows} setLoadPrintable={setLoadPrintable} pageTitle={pageName}/>
+                    <PrintableTable data={dataRows} setLoadPrintable={setLoadPrintable} pageTitle={pageName} />
                 </div>
             }
         </Box>

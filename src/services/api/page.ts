@@ -1,9 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
 import dataPages from '../models/page';
+import authHeader from './header';
 const getPages = async (): Promise<dataPages> => {
     console.log("getPages()")
     try {
-        const response: AxiosResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/page/getPages`);
+        const response: AxiosResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/page/getPages`,
+            {
+                headers: authHeader()
+            }
+        );
         console.log("response ", response.data)
         return response.data;
     } catch (error) {
@@ -12,14 +17,16 @@ const getPages = async (): Promise<dataPages> => {
     }
 }
 
-const refrechFBPages = async (token:String): Promise<AxiosResponse> => {
+const refrechFBPages = async (token: String): Promise<AxiosResponse> => {
     console.log("getPages()")
     try {
-        const response: AxiosResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/page/fetchAndSaveAccountPages`, {
-            params: {
-                access_token: `${token}`
-            }
-        });
+        const response: AxiosResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/page/fetchAndSaveAccountPages`,
+            {
+                headers: authHeader(),
+                params: {
+                    fbToken: `${token}`
+                }
+            });
         console.log("response ", response.data)
         return response;
     } catch (error) {
@@ -28,14 +35,16 @@ const refrechFBPages = async (token:String): Promise<AxiosResponse> => {
     }
 }
 
-const stopRefreshPage = async (idPage:String): Promise<AxiosResponse> => {
-    console.log("getPages()", idPage);
+const stopRefreshPage = async (idPage: String): Promise<AxiosResponse> => {
+    console.log("stopRefreshPage()", idPage);
     try {
-        const response: AxiosResponse = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/api/page/stopRefreshPage`, {
-            params: {
-                idPage: `${idPage}`
-            }
-        });
+        const response: AxiosResponse = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/api/page/stopRefreshPage`,{},
+            {
+                headers: authHeader(),
+                params: {
+                    idPage: `${idPage}`
+                }
+            });
         console.log("response ", response)
         return response;
     } catch (error) {
