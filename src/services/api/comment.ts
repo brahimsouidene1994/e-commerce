@@ -20,6 +20,18 @@ const refrechCommentsPerOfPage = async (access_token: string, idPage: string, ch
     }
 }
 
+const refreshAllPagesComments = (): void => {
+    try {
+        axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/comment/refreshAllPagesCommentsByUser`,
+            {
+                headers: authHeader(),
+            });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
 const getCommentsByPageId = async (page_id: string, status: string): Promise<dataComments> => {
     try {
         const response: AxiosResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/comment/fetchPageComments`,
@@ -150,5 +162,6 @@ export default {
     updateCommentStatus,
     getCommentByID,
     refrechCommentsPerOfPage,
-    getCommentsDistinctByPostId
+    getCommentsDistinctByPostId,
+    refreshAllPagesComments
 }

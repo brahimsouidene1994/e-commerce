@@ -1,7 +1,8 @@
 import React from "react"
 import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import PageApi from '../services/api/page'
+import PageApi from '../services/api/page';
+import CommentApi from '../services/api/comment';
 import page from "services/models/page";
 import Utils from "services/utils/utilities";
 import { FaSearch } from "react-icons/fa";
@@ -110,6 +111,11 @@ const Pages = () => {
         if (!status && _refreshSuccess )
             navigate('/page/comments/' + idPage + '/' + name)
     }
+
+    const handleRefreshAllPagesComments = () => {
+        CommentApi.refreshAllPagesComments()
+    }
+
     const logout = () => {
         localStorage.removeItem('session');
         dispatch(disableAuth());
@@ -140,7 +146,10 @@ const Pages = () => {
                         }
                     />
                 </FormControl>
-                <Button onClick={logout}>Logout</Button>
+                <Box sx={{display:'flex', flexDirection:'column'}}>
+                    <Button onClick={logout}>Logout</Button>
+                    <Button onClick={handleRefreshAllPagesComments}>Refresh All</Button>
+                </Box>
             </Box>
             <TextField
                 label="Filter by Name"
